@@ -1,0 +1,53 @@
+:root {
+    --bg-color: #2D3A3A;
+    --container-color: #424874;
+    --font-color: #EEF0F2;
+    --highlight-color: orange;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg-color);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    position: relative;
+    color: var(--font-color);
+    height: 100vh;
+}
+
+#chart-container {
+    text-align: center;
+    height: 80%;
+    width: 100%;
+    max-width: 1500px;
+    background-color: var(--container-color);
+    margin: 2rem;
+    padding: 1rem 2rem 0rem 2rem;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+svg {
+    height: 100%;
+    width: 100%;
+}
+
+#title {
+    font-size: 2rem;
+}
+
+.legend-label {
+    fill: var(--font-color);
+    font-size: 0.8rem;
+}
+
+#tooltip {
+    fill: var(--font-color);
+    font-size: 1rem;
+}
+
+#tooltip-group {
+    transition: opacity 200ms;
+}
