@@ -19,15 +19,12 @@ body {
     font-size: 2rem;
 }
 
-.legend-label {
+#legend {
     fill: var(--font-color);
     font-size: 0.8rem;
 }
 
 .tile-text {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     text-align: center;
     font-size: 0.7rem;
 }

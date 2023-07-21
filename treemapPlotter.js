@@ -17,15 +17,29 @@ class TreemapPlotter {
             .attr('width', this.width)
             .attr('height', this.height)
         let treemapGroup = svg.append("g")
+            .attr('id', 'tree-map-group')
             .attr('transform',
                 `translate(${this.padding.left}, ${this.padding.top})`)
-        let tooltip = new Tooltip(treemapGroup);
+        this.tooltip = new Tooltip(treemapGroup);
 
 
         this.#plotData(treemapGroup)
-        this.#enableTooltipOnMouseOver(treemapGroup, tooltip)
+        this.#enableTooltipOnMouseOver(treemapGroup)
 
-        return svg.node()
+        return svg
+    }
+
+    update(dataset, svg) {
+        this.dataset = dataset
+
+        this.#prepareData()
+        this.#createColorScale()
+
+        svg.selectAll('.node').remove()
+
+        let treemapGroup = svg.select('#tree-map-group')
+        this.#plotData(treemapGroup)
+        this.#enableTooltipOnMouseOver(treemapGroup)
     }
 
     #prepareData() {
@@ -39,7 +53,7 @@ class TreemapPlotter {
 
     #createColorScale() {
         let domain = this.#getArraOfCategories()
-        let range = d3.schemeYlGnBu[domain.length]
+        let range = d3.quantize(d3.interpolateSinebow, domain.length)
         this.colorScale = d3.scaleOrdinal(domain, range)
     }
 
@@ -64,7 +78,7 @@ class TreemapPlotter {
             .attr('y', 0)
             .attr('width', d => d.x1 - d.x0)
             .attr('height', d => d.y1 - d.y0)
-            .style('stroke', 'black')
+            .style('stroke', 'white')
             .style('fill', d => this.colorScale(d.data.category))
 
         nodes.append('foreignObject')
@@ -74,18 +88,18 @@ class TreemapPlotter {
             .attr('width', d => d.x1 - d.x0)
             .attr('height', d => d.y1 - d.y0)
             .append("xhtml:div")
-            .html(d => `${d.data.name}`);
+            .html(d => d.data.name)
     }
 
 
-    #enableTooltipOnMouseOver(svg, tooltip) {
+    #enableTooltipOnMouseOver(svg) {
         svg.selectAll(".tile, .tile-text")
             .on('mouseover', (event, d) => {
                 let [mouseXRelativeToSVG, mouseYRelativeToSVG] = d3.pointer(event, svg.node())
-                tooltip.showTooltip(this.#getToolTipText(d), mouseXRelativeToSVG, mouseYRelativeToSVG, ['data-value', d.data.value]);
+                this.tooltip.showTooltip(this.#getToolTipText(d), mouseXRelativeToSVG, mouseYRelativeToSVG, ['data-value', d.data.value]);
             })
             .on('mouseout', (e) => {
-                tooltip.hideTooltip();
+                this.tooltip.hideTooltip();
             })
     }
 

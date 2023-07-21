@@ -19,12 +19,20 @@ class LegendPlotter {
 
         this.#createLegend(svg)
 
-        return svg.node()
+        return svg
+    }
+
+    update(dataset, svg) {
+        this.dataset = dataset
+        this.#prepareData()
+        this.#createColorScale()
+        svg.selectAll('#legend').remove()
+        this.#createLegend(svg)
     }
 
     #createLegend(svg) {
         const rectSize = 20;
-        const textWidth = 100;
+        const textWidth = 130;
         const spacing = 5;
         const numOfColumns = 3;
         const categories = this.#getArraOfCategories()
@@ -76,7 +84,7 @@ class LegendPlotter {
 
     #createColorScale() {
         let domain = this.#getArraOfCategories()
-        let range = d3.schemeYlGnBu[domain.length]
+        let range = d3.quantize(d3.interpolateSinebow, domain.length)
         this.colorScale = d3.scaleOrdinal(domain, range)
     }
 
