@@ -1,7 +1,7 @@
 :root {
     --bg-color: #EEF0F2;
     --font-color: #2D3A3A;
-    --highlight-color: orange;
+    --tooltip-bg: #A2999E;
 }
 
 body {
@@ -24,20 +24,17 @@ body {
     font-size: 0.8rem;
 }
 
-#tooltip {
-    fill: var(--font-color);
-    font-size: 1rem;
+.tile-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 0.7rem;
 }
 
-#tooltip {
-    fill: var(--font-color);
-    font-size: 1rem;
-}
-
-#tooltip-bg {
-    fill: var(--bg-color)
-}
-
-#tooltip-group {
-    transition: opacity 200ms;
+#tooltip-text {
+    background-color: var(--tooltip-bg);
+    text-align: center;
+    border-radius: 1rem;
+    padding: 0.5rem;
 }

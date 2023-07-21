@@ -48,36 +48,38 @@ class TreemapPlotter {
     }
 
     #plotData(svg) {
-        svg.selectAll('.tile')
+        let nodes = svg.selectAll('.node')
             .data(this.root.leaves())
             .enter()
-            .append('rect')
+            .append('g')
+            .attr('class', 'node')
+            .attr('transform', d => `translate(${d.x0}, ${d.y0})`);
+
+        nodes.append('rect')
             .attr('class', 'tile')
             .attr('data-name', d => d.data.name)
             .attr('data-category', d => d.data.category)
             .attr('data-value', d => d.data.value)
-            .attr('x', function (d) { return d.x0; })
-            .attr('y', function (d) { return d.y0; })
-            .attr('width', function (d) { return d.x1 - d.x0; })
-            .attr('height', function (d) { return d.y1 - d.y0; })
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', d => d.x1 - d.x0)
+            .attr('height', d => d.y1 - d.y0)
             .style('stroke', 'black')
             .style('fill', d => this.colorScale(d.data.category))
 
-        svg.selectAll('.tile-text')
-            .data(this.root.leaves())
-            .enter()
-            .append('text')
+        nodes.append('foreignObject')
             .attr('class', 'tile-text')
-            .attr('x', function (d) { return d.x0 + 5 })    // +10 to adjust position (more right)
-            .attr('y', function (d) { return d.y0 + 20 })    // +20 to adjust position (lower)
-            .text(function (d) { return d.data.name })
-            .attr('font-size', '15px')
-            .attr('fill', 'black')
-
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', d => d.x1 - d.x0)
+            .attr('height', d => d.y1 - d.y0)
+            .append("xhtml:div")
+            .html(d => `${d.data.name}`);
     }
 
+
     #enableTooltipOnMouseOver(svg, tooltip) {
-        svg.selectAll(".tile")
+        svg.selectAll(".tile, .tile-text")
             .on('mouseover', (event, d) => {
                 let [mouseXRelativeToSVG, mouseYRelativeToSVG] = d3.pointer(event, svg.node())
                 tooltip.showTooltip(this.#getToolTipText(d), mouseXRelativeToSVG, mouseYRelativeToSVG, ['data-value', d.data.value]);
@@ -88,8 +90,8 @@ class TreemapPlotter {
     }
 
     #getToolTipText(d) {
-        return `Name: ${d.data.name}
-            Category: ${d.data.category}
+        return `Name: ${d.data.name} <br>
+            Category: ${d.data.category} <br>
             Value: ${d.data.value}`
     }
 
