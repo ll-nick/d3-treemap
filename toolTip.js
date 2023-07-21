@@ -14,6 +14,7 @@ class Tooltip {
             .attr('id', 'tooltip-group')
             .attr('opacity', 0)
         this.rect = this.tooltipGroup.append('rect')
+            .attr('id', 'tooltip-bg')
             .attr('x', -this.padding.left)
             .attr('y', 0)
             .attr('width', 1)
@@ -36,7 +37,7 @@ class Tooltip {
             .attr('opacity', 1)
         this.tooltipGroup
             .attr('transform', 'translate(' + (x + 10) + ',' + (y - 10) + ')')
-            .attr('opacity', 0.6)
+            .attr('opacity', 0.8)
             .raise()
         this.#adjustRectSize()
         attributes.forEach(attr => {
